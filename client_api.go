@@ -152,8 +152,7 @@ func (this *ClientAPI) StatusUnit(name string) (UnitStatus, error) {
 	}
 
 	return UnitStatus{
-		Unit:        u.Name,
-		Description: description(u.Options),
+		Unit: u.Name,
 
 		State:  string(u.DesiredState),
 		Load:   unitState.SystemdLoadState,
