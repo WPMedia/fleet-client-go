@@ -134,10 +134,6 @@ func (this *ClientAPI) Status(name string) (*Status, error) {
 	return nil, fmt.Errorf("Method not implemented: ClientAPI.Status")
 }
 
-func (this *ClientAPI) Journal(name string) (string, error) {
-	return "", fmt.Errorf("Method not implemented: ClientAPI.Journal")
-}
-
 func (this *ClientAPI) StatusUnit(name string) (UnitStatus, error) {
 	// Get unit state.
 	unitState, err := this.unitState(name)
