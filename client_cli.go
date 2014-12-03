@@ -43,6 +43,17 @@ func (this *ClientCLI) Unit(name string) (*schema.Unit, error) {
 	return nil, fmt.Errorf("Method not implemented: ClientCLI.Unit")
 }
 
+func (this *ClientCLI) Journal(name string) (string, error) {
+	cmd := execPkg.Command(FLEETCTL, ENDPOINT_OPTION, this.etcdPeer, "journal", "-lines=50", name)
+	stdout, err := exec(cmd)
+
+	if err != nil {
+		return "", errgo.Mask(err)
+	}
+
+	return stdout, nil
+}
+
 func (this *ClientCLI) Start(name string) error {
 	cmd := execPkg.Command(FLEETCTL, ENDPOINT_OPTION, this.etcdPeer, "start", "--no-block=true", name)
 	_, err := exec(cmd)
