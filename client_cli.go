@@ -44,7 +44,7 @@ func (this *ClientCLI) Unit(name string) (*schema.Unit, error) {
 }
 
 func (this *ClientCLI) Start(name string) error {
-	cmd := execPkg.Command(FLEETCTL, ENDPOINT_OPTION, this.etcdPeer, "start", "--no-block=true", name)
+	cmd := execPkg.Command(FLEETCTL, "--driver", "etcd", ENDPOINT_OPTION, this.etcdPeer, "start", "--no-block=true", name)
 	_, err := exec(cmd)
 
 	if err != nil {
@@ -55,7 +55,7 @@ func (this *ClientCLI) Start(name string) error {
 }
 
 func (this *ClientCLI) Stop(name string) error {
-	cmd := execPkg.Command(FLEETCTL, ENDPOINT_OPTION, this.etcdPeer, "stop", "--no-block=true", name)
+	cmd := execPkg.Command(FLEETCTL, "--driver", "etcd", ENDPOINT_OPTION, this.etcdPeer, "stop", "--no-block=true", name)
 	_, err := exec(cmd)
 
 	if err != nil {
@@ -66,7 +66,7 @@ func (this *ClientCLI) Stop(name string) error {
 }
 
 func (this *ClientCLI) Load(name string) error {
-	cmd := execPkg.Command(FLEETCTL, ENDPOINT_OPTION, this.etcdPeer, "load", "--no-block=true", name)
+	cmd := execPkg.Command(FLEETCTL, "--driver", "etcd", ENDPOINT_OPTION, this.etcdPeer, "load", "--no-block=true", name)
 	_, err := exec(cmd)
 
 	if err != nil {
@@ -77,7 +77,7 @@ func (this *ClientCLI) Load(name string) error {
 }
 
 func (this *ClientCLI) Destroy(name string) error {
-	cmd := execPkg.Command(FLEETCTL, ENDPOINT_OPTION, this.etcdPeer, "destroy", name)
+	cmd := execPkg.Command(FLEETCTL, "--driver", "etcd", ENDPOINT_OPTION, this.etcdPeer, "destroy", name)
 	_, err := exec(cmd)
 
 	if err != nil {
