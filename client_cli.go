@@ -54,7 +54,7 @@ func (this *ClientCLI) Submit(name, filePath string) error {
 	output, err := exec(cmd)
 
 	if err != nil {
-		fmt.Printf("%s\n", output)
+		fmt.Printf("Error in Submit: %s %s\n", err, output)
 		return errgo.Mask(err)
 	}
 
