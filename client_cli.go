@@ -46,6 +46,10 @@ func NewClientCLIWithPeer(etcdPeer string) FleetClient {
 
 func (this *ClientCLI) Submit(name, filePath string) error {
 	cmd := execPkg.Command(FLEETCTL, this.driver, ENDPOINT_OPTION, this.etcdPeer, "submit", filePath)
+	for _, arg := range cmd.Args {
+		fmt.Printf(" %s", arg)
+	}
+	fmt.Printf("\n")
 	_, err := exec(cmd)
 
 	if err != nil {
@@ -61,7 +65,6 @@ func (this *ClientCLI) Unit(name string) (*schema.Unit, error) {
 
 func (this *ClientCLI) Start(name string) error {
 	cmd := execPkg.Command(FLEETCTL, this.driver, ENDPOINT_OPTION, this.etcdPeer, "start", "--no-block=true", name)
-	fmt.Printf(cmd.Path)
 	for _, arg := range cmd.Args {
 		fmt.Printf(" %s", arg)
 	}
