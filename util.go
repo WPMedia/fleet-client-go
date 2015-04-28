@@ -29,7 +29,7 @@ func exec(cmd *execPkg.Cmd) (string, error) {
 	cmd.Stderr = &stderr
 
 	if err := cmd.Run(); err != nil {
-		return "", err
+		return stderr.String(), err
 	}
 
 	if err := stderr.String(); err != "" {
