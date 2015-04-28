@@ -33,7 +33,7 @@ func NewClientCLIWithPeer(etcdPeer string) FleetClient {
 
 	if strings.Contains(output, "0.10") {
 		fmt.Printf("Adding driver option for version 0.10\n")
-		driver = " --driver=etcd "
+		driver = "--driver etcd"
 	} else {
 		fmt.Printf("Not adding driver option: %s\n", output)
 	}
@@ -64,7 +64,7 @@ func (this *ClientCLI) Unit(name string) (*schema.Unit, error) {
 }
 
 func (this *ClientCLI) Start(name string) error {
-	cmd := execPkg.Command(FLEETCTL, this.driver, ENDPOINT_OPTION, this.etcdPeer, "start", "--no-block=true", name)
+	cmd := execPkg.Command(FLEETCTL, this.driver, ENDPOINT_OPTION, this.etcdPeer, "start", "--no-block=false", name)
 	for _, arg := range cmd.Args {
 		fmt.Printf(" %s", arg)
 	}
@@ -80,7 +80,7 @@ func (this *ClientCLI) Start(name string) error {
 }
 
 func (this *ClientCLI) Stop(name string) error {
-	cmd := execPkg.Command(FLEETCTL, this.driver, ENDPOINT_OPTION, this.etcdPeer, "stop", "--no-block=true", name)
+	cmd := execPkg.Command(FLEETCTL, this.driver, ENDPOINT_OPTION, this.etcdPeer, "stop", "--no-block=false", name)
 	_, err := exec(cmd)
 
 	if err != nil {
@@ -91,7 +91,7 @@ func (this *ClientCLI) Stop(name string) error {
 }
 
 func (this *ClientCLI) Load(name string) error {
-	cmd := execPkg.Command(FLEETCTL, this.driver, ENDPOINT_OPTION, this.etcdPeer, "load", "--no-block=true", name)
+	cmd := execPkg.Command(FLEETCTL, this.driver, ENDPOINT_OPTION, this.etcdPeer, "load", "--no-block=false", name)
 	_, err := exec(cmd)
 
 	if err != nil {
