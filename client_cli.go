@@ -63,7 +63,7 @@ func (this *ClientCLI) Start(name string) error {
 	cmd := execPkg.Command(FLEETCTL, this.driver, ENDPOINT_OPTION, this.etcdPeer, "start", "--no-block=true", name)
 	fmt.Printf(cmd.Path)
 	for arg := range cmd.Args {
-		fmt.Printf(" %v", arg)
+		fmt.Printf(" %s", arg)
 	}
 	fmt.Printf("\n")
 
