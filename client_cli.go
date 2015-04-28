@@ -29,7 +29,7 @@ func NewClientCLIWithPeer(etcdPeer string) FleetClient {
 }
 
 func (this *ClientCLI) Submit(name, filePath string) error {
-	cmd := execPkg.Command(FLEETCTL, "--drive", "etcd", ENDPOINT_OPTION, this.etcdPeer, "submit", filePath)
+	cmd := execPkg.Command(FLEETCTL, "--driver", "etcd", ENDPOINT_OPTION, this.etcdPeer, "submit", filePath)
 	_, err := exec(cmd)
 
 	if err != nil {
