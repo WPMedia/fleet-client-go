@@ -33,7 +33,7 @@ func NewClientCLIWithPeer(etcdPeer string) FleetClient {
 
 	if strings.Contains(output, "0.10") {
 		fmt.Printf("Adding driver option for version 0.10\n")
-		driver = "--driver etcd"
+		driver = "--driver=etcd"
 	} else {
 		fmt.Printf("Not adding driver option: %s\n", output)
 	}
