@@ -1,11 +1,11 @@
 package client
 
 import (
+	"fmt"
 	"github.com/coreos/fleet/schema"
 	"github.com/juju/errgo"
-
-	"fmt"
 	execPkg "os/exec"
+	"strings"
 )
 
 const (
@@ -20,13 +20,21 @@ type ClientCLI struct {
 }
 
 func NewClientCLI() FleetClient {
-	return NewClientCLIWithPeer(ENDPOINT_VALUE, "")
+	return NewClientCLIWithPeer(ENDPOINT_VALUE)
 }
 
-func NewClientCLIWithPeer(etcdPeer, driver string) FleetClient {
-	if driver != "" {
-		driver = fmt.Sprintf(" --driver=%s ", driver)
+func NewClientCLIWithPeer(etcdPeer string) FleetClient {
+	driver := ""
+	cmd := execPkg.Command(FLEETCTL, "--version")
+	output, err := exec(cmd)
+	if err != nil {
+		return nil
 	}
+
+	if strings.Contains(output, "0.10") {
+		driver = " --driver=etcd "
+	}
+
 	return &ClientCLI{
 		etcdPeer: etcdPeer,
 		driver:   driver,
