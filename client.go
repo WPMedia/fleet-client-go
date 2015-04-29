@@ -60,7 +60,7 @@ type FleetClient interface {
 	// different properties than a ScheduledUnit.
 	Unit(name string) (*schema.Unit, error)
 
-	Submit(name, filePath string) error
+	Submit(filePath string) error
 	Start(name string) error
 	Stop(name string) error
 	Load(name string) error
