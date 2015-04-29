@@ -18,7 +18,13 @@ func (status UnitStatus) MachineIP() string {
 // StatusAll executes "fleetctl status" and parses the output table. Thus, certain fields can be mangled or
 // shortened, e.g. the machine column.
 func (this *ClientCLI) StatusAll() ([]UnitStatus, error) {
-	cmd := execPkg.Command(FLEETCTL, this.driver, ENDPOINT_OPTION, this.etcdPeer, "list-units", "--fields=unit,load,active,sub,machine")
+	var cmd *execPkg.Cmd
+
+	if this.driver != "" {
+		cmd = execPkg.Command(FLEETCTL, this.driver, ENDPOINT_OPTION, this.etcdPeer, "list-units", "--fields=unit,load,active,sub,machine")
+	} else {
+		cmd = execPkg.Command(FLEETCTL, ENDPOINT_OPTION, this.etcdPeer, "list-units", "--fields=unit,load,active,sub,machine")
+	}
 	stdout, err := exec(cmd)
 	if err != nil {
 		return []UnitStatus{}, err

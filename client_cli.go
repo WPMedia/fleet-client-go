@@ -49,7 +49,13 @@ func args(extras []string, required ...string) []string {
 }
 
 func (this *ClientCLI) Submit(filePath ...string) error {
-	cmd := execPkg.Command(FLEETCTL, args(filePath, this.driver, ENDPOINT_OPTION, this.etcdPeer, "submit")...)
+	var cmd *execPkg.Cmd
+
+	if this.driver != "" {
+		cmd = execPkg.Command(FLEETCTL, args(filePath, this.driver, ENDPOINT_OPTION, this.etcdPeer, "submit")...)
+	} else {
+		cmd = execPkg.Command(FLEETCTL, args(filePath, ENDPOINT_OPTION, this.etcdPeer, "submit")...)
+	}
 	output, err := exec(cmd)
 
 	if err != nil {
@@ -65,7 +71,13 @@ func (this *ClientCLI) Unit(name string) (*schema.Unit, error) {
 }
 
 func (this *ClientCLI) Start(name ...string) error {
-	cmd := execPkg.Command(FLEETCTL, args(name, this.driver, ENDPOINT_OPTION, this.etcdPeer, "start", "--no-block=true")...)
+	var cmd *execPkg.Cmd
+
+	if this.driver != "" {
+		cmd = execPkg.Command(FLEETCTL, args(name, this.driver, ENDPOINT_OPTION, this.etcdPeer, "start", "--no-block=true")...)
+	} else {
+		cmd = execPkg.Command(FLEETCTL, args(name, ENDPOINT_OPTION, this.etcdPeer, "start", "--no-block=true")...)
+	}
 	_, err := exec(cmd)
 
 	if err != nil {
@@ -76,7 +88,13 @@ func (this *ClientCLI) Start(name ...string) error {
 }
 
 func (this *ClientCLI) Stop(name ...string) error {
-	cmd := execPkg.Command(FLEETCTL, args(name, this.driver, ENDPOINT_OPTION, this.etcdPeer, "stop", "--no-block=true")...)
+	var cmd *execPkg.Cmd
+
+	if this.driver != "" {
+		cmd = execPkg.Command(FLEETCTL, args(name, this.driver, ENDPOINT_OPTION, this.etcdPeer, "stop", "--no-block=true")...)
+	} else {
+		cmd = execPkg.Command(FLEETCTL, args(name, ENDPOINT_OPTION, this.etcdPeer, "stop", "--no-block=true")...)
+	}
 	_, err := exec(cmd)
 
 	if err != nil {
@@ -87,7 +105,13 @@ func (this *ClientCLI) Stop(name ...string) error {
 }
 
 func (this *ClientCLI) Load(name ...string) error {
-	cmd := execPkg.Command(FLEETCTL, args(name, this.driver, ENDPOINT_OPTION, this.etcdPeer, "load", "--no-block=true")...)
+	var cmd *execPkg.Cmd
+
+	if this.driver != "" {
+		cmd = execPkg.Command(FLEETCTL, args(name, this.driver, ENDPOINT_OPTION, this.etcdPeer, "load", "--no-block=true")...)
+	} else {
+		cmd = execPkg.Command(FLEETCTL, args(name, ENDPOINT_OPTION, this.etcdPeer, "load", "--no-block=true")...)
+	}
 	_, err := exec(cmd)
 
 	if err != nil {
@@ -98,7 +122,13 @@ func (this *ClientCLI) Load(name ...string) error {
 }
 
 func (this *ClientCLI) Destroy(name ...string) error {
-	cmd := execPkg.Command(FLEETCTL, args(name, this.driver, ENDPOINT_OPTION, this.etcdPeer, "destroy")...)
+	var cmd *execPkg.Cmd
+
+	if this.driver != "" {
+		cmd = execPkg.Command(FLEETCTL, args(name, this.driver, ENDPOINT_OPTION, this.etcdPeer, "destroy")...)
+	} else {
+		cmd = execPkg.Command(FLEETCTL, args(name, ENDPOINT_OPTION, this.etcdPeer, "destroy")...)
+	}
 	_, err := exec(cmd)
 
 	if err != nil {
