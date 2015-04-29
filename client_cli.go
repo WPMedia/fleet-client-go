@@ -44,9 +44,12 @@ func NewClientCLIWithPeer(etcdPeer string) FleetClient {
 	}
 }
 
-func (this *ClientCLI) Submit(filePath string) error {
-	fmt.Printf(filePath + "\n")
-	cmd := execPkg.Command(FLEETCTL, this.driver, ENDPOINT_OPTION, this.etcdPeer, "submit", filePath)
+func args(extras []string, required ...string) []string {
+	return append(required, extras...)
+}
+
+func (this *ClientCLI) Submit(filePath ...string) error {
+	cmd := execPkg.Command(FLEETCTL, args(filePath, this.driver, ENDPOINT_OPTION, this.etcdPeer, "submit")...)
 	output, err := exec(cmd)
 
 	if err != nil {
@@ -61,8 +64,8 @@ func (this *ClientCLI) Unit(name string) (*schema.Unit, error) {
 	return nil, fmt.Errorf("Method not implemented: ClientCLI.Unit")
 }
 
-func (this *ClientCLI) Start(name string) error {
-	cmd := execPkg.Command(FLEETCTL, this.driver, ENDPOINT_OPTION, this.etcdPeer, "start", "--no-block=true", name)
+func (this *ClientCLI) Start(name ...string) error {
+	cmd := execPkg.Command(FLEETCTL, args(name, this.driver, ENDPOINT_OPTION, this.etcdPeer, "start", "--no-block=true")...)
 	_, err := exec(cmd)
 
 	if err != nil {
@@ -72,8 +75,8 @@ func (this *ClientCLI) Start(name string) error {
 	return nil
 }
 
-func (this *ClientCLI) Stop(name string) error {
-	cmd := execPkg.Command(FLEETCTL, this.driver, ENDPOINT_OPTION, this.etcdPeer, "stop", "--no-block=true", name)
+func (this *ClientCLI) Stop(name ...string) error {
+	cmd := execPkg.Command(FLEETCTL, args(name, this.driver, ENDPOINT_OPTION, this.etcdPeer, "stop", "--no-block=true")...)
 	_, err := exec(cmd)
 
 	if err != nil {
@@ -83,8 +86,8 @@ func (this *ClientCLI) Stop(name string) error {
 	return nil
 }
 
-func (this *ClientCLI) Load(name string) error {
-	cmd := execPkg.Command(FLEETCTL, this.driver, ENDPOINT_OPTION, this.etcdPeer, "load", "--no-block=true", name)
+func (this *ClientCLI) Load(name ...string) error {
+	cmd := execPkg.Command(FLEETCTL, args(name, this.driver, ENDPOINT_OPTION, this.etcdPeer, "load", "--no-block=true")...)
 	_, err := exec(cmd)
 
 	if err != nil {
@@ -94,8 +97,8 @@ func (this *ClientCLI) Load(name string) error {
 	return nil
 }
 
-func (this *ClientCLI) Destroy(name string) error {
-	cmd := execPkg.Command(FLEETCTL, this.driver, ENDPOINT_OPTION, this.etcdPeer, "destroy", name)
+func (this *ClientCLI) Destroy(name ...string) error {
+	cmd := execPkg.Command(FLEETCTL, args(name, this.driver, ENDPOINT_OPTION, this.etcdPeer, "destroy")...)
 	_, err := exec(cmd)
 
 	if err != nil {

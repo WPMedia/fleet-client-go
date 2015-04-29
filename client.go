@@ -60,11 +60,11 @@ type FleetClient interface {
 	// different properties than a ScheduledUnit.
 	Unit(name string) (*schema.Unit, error)
 
-	Submit(filePath string) error
-	Start(name string) error
-	Stop(name string) error
-	Load(name string) error
-	Destroy(name string) error
+	Submit(filePath ...string) error
+	Start(name ...string) error
+	Stop(name ...string) error
+	Load(name ...string) error
+	Destroy(name ...string) error
 	Status(name string) (*Status, error) // Deprecated, use StatusUnit()
 	StatusUnit(name string) (UnitStatus, error)
 	StatusAll() ([]UnitStatus, error)
