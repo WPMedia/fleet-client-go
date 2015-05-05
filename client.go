@@ -68,6 +68,7 @@ type FleetClient interface {
 	Status(name string) (*Status, error) // Deprecated, use StatusUnit()
 	StatusUnit(name string) (UnitStatus, error)
 	StatusAll() ([]UnitStatus, error)
+	Machines() ([]Machine, error)
 }
 
 func NewClient() FleetClient {
