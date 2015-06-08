@@ -9,26 +9,28 @@ import (
 )
 
 const (
-	FLEETCTL        = "fleetctl"
-	ENDPOINT_OPTION = "--endpoint"
-	ENDPOINT_VALUE  = "http://172.17.42.1:4001"
+	FLEETCTL           = "fleetctl"
+	ENDPOINT_OPTION    = "--endpoint"
+	ENDPOINT_VALUE     = "http://172.17.42.1:4001"
+	ETCD_PREFIX_OPTION = "--etcd-key-prefix"
 )
 
 type ClientCLI struct {
-	etcdPeer string
-	driver   string
+	etcdPeer   string
+	driver     string
+	etcdPrefix string
 }
 
 func NewClientCLI() FleetClient {
 	return NewClientCLIWithPeer(ENDPOINT_VALUE)
 }
 
-func NewClientCLIWithPeer(etcdPeer string) FleetClient {
+func getDriver() string {
 	driver := ""
 	cmd := execPkg.Command(FLEETCTL, "--version")
 	output, err := exec(cmd)
 	if err != nil {
-		return nil
+		return ""
 	}
 
 	if strings.Contains(output, "0.10") {
@@ -37,11 +39,29 @@ func NewClientCLIWithPeer(etcdPeer string) FleetClient {
 	} else {
 		fmt.Printf("Not adding driver option: %s\n", output)
 	}
+	return driver
 
+}
+
+func NewClientCLIWithPeer(etcdPeer string) FleetClient {
 	return &ClientCLI{
 		etcdPeer: etcdPeer,
-		driver:   driver,
+		driver:   getDriver(),
 	}
+}
+
+func NewClientCLIWithPeerAndPrefix(etcdPeer, etcdPrefix string) FleetClient {
+	client := NewClientCLIWithPeer(etcdPeer)
+	if etcdPrefix == "" {
+		etcdPrefix = "/_coreos.com/fleet/"
+	}
+	return &ClientCLI{
+		etcdPeer:   etcdPeer,
+		driver:     getDriver(),
+		etcdPrefix: etcdPrefix,
+	}
+
+	return client
 }
 
 func args(extras []string, required ...string) []string {
@@ -52,9 +72,9 @@ func (this *ClientCLI) Submit(filePath ...string) error {
 	var cmd *execPkg.Cmd
 
 	if this.driver != "" {
-		cmd = execPkg.Command(FLEETCTL, args(filePath, this.driver, ENDPOINT_OPTION, this.etcdPeer, "submit")...)
+		cmd = execPkg.Command(FLEETCTL, args(filePath, this.driver, ENDPOINT_OPTION, this.etcdPeer, ETCD_PREFIX_OPTION, this.etcdPrefix, "submit")...)
 	} else {
-		cmd = execPkg.Command(FLEETCTL, args(filePath, ENDPOINT_OPTION, this.etcdPeer, "submit")...)
+		cmd = execPkg.Command(FLEETCTL, args(filePath, ENDPOINT_OPTION, this.etcdPeer, ETCD_PREFIX_OPTION, this.etcdPrefix, "submit")...)
 	}
 	output, err := exec(cmd)
 
@@ -74,9 +94,9 @@ func (this *ClientCLI) Start(name ...string) error {
 	var cmd *execPkg.Cmd
 
 	if this.driver != "" {
-		cmd = execPkg.Command(FLEETCTL, args(name, this.driver, ENDPOINT_OPTION, this.etcdPeer, "start", "--no-block=true")...)
+		cmd = execPkg.Command(FLEETCTL, args(name, this.driver, ENDPOINT_OPTION, this.etcdPeer, ETCD_PREFIX_OPTION, this.etcdPrefix, "start", "--no-block=true")...)
 	} else {
-		cmd = execPkg.Command(FLEETCTL, args(name, ENDPOINT_OPTION, this.etcdPeer, "start", "--no-block=true")...)
+		cmd = execPkg.Command(FLEETCTL, args(name, ENDPOINT_OPTION, this.etcdPeer, ETCD_PREFIX_OPTION, this.etcdPrefix, "start", "--no-block=true")...)
 	}
 	_, err := exec(cmd)
 
@@ -91,9 +111,9 @@ func (this *ClientCLI) Stop(name ...string) error {
 	var cmd *execPkg.Cmd
 
 	if this.driver != "" {
-		cmd = execPkg.Command(FLEETCTL, args(name, this.driver, ENDPOINT_OPTION, this.etcdPeer, "stop", "--no-block=true")...)
+		cmd = execPkg.Command(FLEETCTL, args(name, this.driver, ENDPOINT_OPTION, this.etcdPeer, ETCD_PREFIX_OPTION, this.etcdPrefix, "stop", "--no-block=true")...)
 	} else {
-		cmd = execPkg.Command(FLEETCTL, args(name, ENDPOINT_OPTION, this.etcdPeer, "stop", "--no-block=true")...)
+		cmd = execPkg.Command(FLEETCTL, args(name, ENDPOINT_OPTION, this.etcdPeer, ETCD_PREFIX_OPTION, this.etcdPrefix, "stop", "--no-block=true")...)
 	}
 	_, err := exec(cmd)
 
@@ -108,9 +128,9 @@ func (this *ClientCLI) Load(name ...string) error {
 	var cmd *execPkg.Cmd
 
 	if this.driver != "" {
-		cmd = execPkg.Command(FLEETCTL, args(name, this.driver, ENDPOINT_OPTION, this.etcdPeer, "load", "--no-block=true")...)
+		cmd = execPkg.Command(FLEETCTL, args(name, this.driver, ENDPOINT_OPTION, this.etcdPeer, ETCD_PREFIX_OPTION, this.etcdPrefix, "load", "--no-block=true")...)
 	} else {
-		cmd = execPkg.Command(FLEETCTL, args(name, ENDPOINT_OPTION, this.etcdPeer, "load", "--no-block=true")...)
+		cmd = execPkg.Command(FLEETCTL, args(name, ENDPOINT_OPTION, this.etcdPeer, ETCD_PREFIX_OPTION, this.etcdPrefix, "load", "--no-block=true")...)
 	}
 	_, err := exec(cmd)
 
@@ -125,9 +145,9 @@ func (this *ClientCLI) Destroy(name ...string) error {
 	var cmd *execPkg.Cmd
 
 	if this.driver != "" {
-		cmd = execPkg.Command(FLEETCTL, args(name, this.driver, ENDPOINT_OPTION, this.etcdPeer, "destroy")...)
+		cmd = execPkg.Command(FLEETCTL, args(name, this.driver, ENDPOINT_OPTION, this.etcdPeer, ETCD_PREFIX_OPTION, this.etcdPrefix, "destroy")...)
 	} else {
-		cmd = execPkg.Command(FLEETCTL, args(name, ENDPOINT_OPTION, this.etcdPeer, "destroy")...)
+		cmd = execPkg.Command(FLEETCTL, args(name, ENDPOINT_OPTION, this.etcdPeer, ETCD_PREFIX_OPTION, this.etcdPrefix, "destroy")...)
 	}
 	_, err := exec(cmd)
 
