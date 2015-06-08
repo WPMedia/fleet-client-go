@@ -21,7 +21,7 @@ func (this *ClientCLI) StatusAll() ([]UnitStatus, error) {
 	var cmd *execPkg.Cmd
 
 	if this.driver != "" {
-		cmd = execPkg.Command(FLEETCTL, this.driver, ENDPOINT_OPTION, this.etcdPeer, "list-units", "--fields=unit,load,active,sub,machine")
+		cmd = execPkg.Command(FLEETCTL, this.driver, ENDPOINT_OPTION, this.etcdPeer, ETCD_PREFIX_OPTION, this.etcdPrefix, "list-units", "--fields=unit,load,active,sub,machine")
 	} else {
 		cmd = execPkg.Command(FLEETCTL, ENDPOINT_OPTION, this.etcdPeer, "list-units", "--fields=unit,load,active,sub,machine")
 	}

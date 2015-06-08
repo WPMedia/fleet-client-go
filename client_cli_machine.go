@@ -17,7 +17,7 @@ func (this *ClientCLI) Machines() ([]Machine, error) {
 	var cmd *execPkg.Cmd
 
 	if this.driver != "" {
-		cmd = execPkg.Command(FLEETCTL, this.driver, ENDPOINT_OPTION, this.etcdPeer, "list-machines", "--full", "--fields=machine,ip", "--no-legend")
+		cmd = execPkg.Command(FLEETCTL, this.driver, ENDPOINT_OPTION, this.etcdPeer, ETCD_PREFIX_OPTION, this.etcdPrefix, "list-machines", "--full", "--fields=machine,ip", "--no-legend")
 	} else {
 		cmd = execPkg.Command(FLEETCTL, ENDPOINT_OPTION, this.etcdPeer, "list-machines", "--full", "--fields=machine,ip", "--no-legend")
 	}
