@@ -5,7 +5,6 @@ import (
 	"github.com/coreos/fleet/schema"
 	"github.com/juju/errgo"
 	execPkg "os/exec"
-	"strings"
 )
 
 const (
@@ -41,7 +40,7 @@ func NewClientCLIWithPeerAndPrefix(etcdPeer, etcdPrefix string) FleetClient {
 	}
 	return &ClientCLI{
 		etcdPeer:   etcdPeer,
-		driver:     getDriver(),
+		driver:     "--driver=etcd",
 		etcdPrefix: etcdPrefix,
 	}
 
