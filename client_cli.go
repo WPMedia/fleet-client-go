@@ -26,28 +26,10 @@ func NewClientCLI() FleetClient {
 	return NewClientCLIWithPeer(ENDPOINT_VALUE)
 }
 
-func getDriver() string {
-	driver := ""
-	cmd := execPkg.Command(FLEETCTL, "--version")
-	output, err := exec(cmd)
-	if err != nil {
-		return ""
-	}
-
-	if strings.Contains(output, "0.10") {
-		fmt.Printf("Adding driver option for version 0.10\n")
-		driver = "--driver=etcd"
-	} else {
-		fmt.Printf("Not adding driver option: %s\n", output)
-	}
-	return driver
-
-}
-
 func NewClientCLIWithPeer(etcdPeer string) FleetClient {
 	return &ClientCLI{
 		etcdPeer:   etcdPeer,
-		driver:     getDriver(),
+		driver:     "--driver=etcd",
 		etcdPrefix: DEFAULT_ETCD_PREFIX,
 	}
 }
