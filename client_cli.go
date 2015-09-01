@@ -10,7 +10,7 @@ import (
 const (
 	FLEETCTL            = "fleetctl"
 	ENDPOINT_OPTION     = "--endpoint"
-	ENDPOINT_VALUE      = "http://172.17.42.1:4001"
+	ENDPOINT_VALUE      = "http://172.17.42.1:4101"
 	ETCD_PREFIX_OPTION  = "--etcd-key-prefix"
 	DEFAULT_ETCD_PREFIX = "/_coreos.com/fleet/"
 )
@@ -22,7 +22,9 @@ type ClientCLI struct {
 }
 
 func NewClientCLI() FleetClient {
-	return NewClientCLIWithPeer(ENDPOINT_VALUE)
+	return &ClientCLI{
+		etcdPeer: ENDPOINT_VALUE,
+	}
 }
 
 func NewClientCLIWithPeer(etcdPeer string) FleetClient {
