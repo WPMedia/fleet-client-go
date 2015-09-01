@@ -10,7 +10,7 @@ import (
 const (
 	FLEETCTL            = "fleetctl"
 	ENDPOINT_OPTION     = "--endpoint"
-	ENDPOINT_VALUE      = "http://172.17.42.1:4101"
+	ENDPOINT_VALUE      = "file:///var/run/fleet.sock"
 	ETCD_PREFIX_OPTION  = "--etcd-key-prefix"
 	DEFAULT_ETCD_PREFIX = "/_coreos.com/fleet/"
 )
