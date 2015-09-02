@@ -5,13 +5,12 @@ import (
 	"github.com/coreos/fleet/schema"
 	"github.com/juju/errgo"
 	execPkg "os/exec"
-	"strings"
 )
 
 const (
 	FLEETCTL            = "fleetctl"
 	ENDPOINT_OPTION     = "--endpoint"
-	ENDPOINT_VALUE      = "http://172.17.42.1:4001"
+	ENDPOINT_VALUE      = "file:///var/run/fleet.sock"
 	ETCD_PREFIX_OPTION  = "--etcd-key-prefix"
 	DEFAULT_ETCD_PREFIX = "/_coreos.com/fleet/"
 )
@@ -23,31 +22,15 @@ type ClientCLI struct {
 }
 
 func NewClientCLI() FleetClient {
-	return NewClientCLIWithPeer(ENDPOINT_VALUE)
-}
-
-func getDriver() string {
-	driver := ""
-	cmd := execPkg.Command(FLEETCTL, "--version")
-	output, err := exec(cmd)
-	if err != nil {
-		return ""
+	return &ClientCLI{
+		etcdPeer: ENDPOINT_VALUE,
 	}
-
-	if strings.Contains(output, "0.10") {
-		fmt.Printf("Adding driver option for version 0.10\n")
-		driver = "--driver=etcd"
-	} else {
-		fmt.Printf("Not adding driver option: %s\n", output)
-	}
-	return driver
-
 }
 
 func NewClientCLIWithPeer(etcdPeer string) FleetClient {
 	return &ClientCLI{
 		etcdPeer:   etcdPeer,
-		driver:     getDriver(),
+		driver:     "--driver=etcd",
 		etcdPrefix: DEFAULT_ETCD_PREFIX,
 	}
 }
@@ -59,7 +42,7 @@ func NewClientCLIWithPeerAndPrefix(etcdPeer, etcdPrefix string) FleetClient {
 	}
 	return &ClientCLI{
 		etcdPeer:   etcdPeer,
-		driver:     getDriver(),
+		driver:     "--driver=etcd",
 		etcdPrefix: etcdPrefix,
 	}
 
